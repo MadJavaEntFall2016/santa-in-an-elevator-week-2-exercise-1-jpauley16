@@ -38,5 +38,23 @@ public class ListTest {
         assertTrue("List missing inserted element", myList.contains(elementToInsert));
     }
 
+    @Test
+    public void addToArray() {
+        myList.add("Item 4");
+        assertEquals(myList.size(), 4);
+    }
+
+
+    @Test
+    public void removeFromArray() {
+        myList.remove(0);
+        assertEquals(myList.size(), 2);
+    }
+
+    @Test
+    public void getFromArray() throws IndexOutOfBoundsException {
+        String listItem = (String) myList.get(0);
+        assertTrue(listItem.equals(myList.get(0)));
+    }
 
 }

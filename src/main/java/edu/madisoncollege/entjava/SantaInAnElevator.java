@@ -1,6 +1,11 @@
 package edu.madisoncollege.entjava;
 
 
+import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.util.*;
+
 /**
  * Created by paulawaite on 9/7/16.
  *
@@ -37,5 +42,61 @@ package edu.madisoncollege.entjava;
 
 public class SantaInAnElevator {
 
+    private final Logger logger = Logger.getLogger(this.getClass());
+    private ClassLoader loader = null;
+    private BufferedReader reader = null;
+    private List<String> tokenArray = null;
+    private File directionsFile = null;
+
+
+    public List<String> processToken() {
+
+        String resourceName = "SantaUpDown.txt";
+        tokenArray = new ArrayList<String>();
+
+        try {
+
+            loader = getClass().getClassLoader();
+            directionsFile = new File(loader.getResource(resourceName).getFile());
+            reader = new BufferedReader(new FileReader(directionsFile));
+
+            while(reader.ready()) {
+                tokenArray = Arrays.asList(reader.readLine().split(""));
+            }
+
+        } catch (FileNotFoundException fileNotFound) {
+            logger.info("File not found");
+            fileNotFound.printStackTrace();
+        } catch (IOException ioException) {
+            logger.info("Bad news");
+            ioException.printStackTrace();
+        } catch (Exception exception) {
+            logger.info("Bad news");
+            exception.printStackTrace();
+        }
+
+        return tokenArray;
+    }
+
+    public int determineFloor(List<String> tokenArray) {
+
+        int floorLevel = 0;
+
+        for(String floorDirections : tokenArray) {
+            if(floorDirections.equals("(")) {
+                floorLevel ++;
+            } else {
+                floorLevel --;
+            }
+        }
+
+        return floorLevel;
+
+    }
+
+    public void displayFloorLevel() {
+
+        logger.info("Santa is on floor: " +  determineFloor(processToken()));
+    }
 
 }
